@@ -1,32 +1,39 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import pandas as pd
+import sklearn
 from sklearn import datasets, linear_model
 from sklearn.metrics import mean_squared_error, r2_score
 
-# Load the diabetes dataset
-diabetes_x ,diabetes_y = datasets.load_diabetes(return_X_y=True)
+data = pd.read_csv('student-mat.csv',sep=';')
 
-# Use only one feature
-diabetes_x = diabetes_x[:, np.newaxis, 2]
+# print(data.head())
 
-diabetes_x_train = diabetes_x[:-20]  # Use all but the last 20 data points for training
-diabetes_x_test = diabetes_x[-20:]   # Use the last 20 data points for testing
+# Select relevant columns
+data = data[['G1','G2','G3','studytime','failures','absences']]
+print(data.head())
+# Define features and target variable
+predict = 'G3'
 
-diabetes_y_train = diabetes_y[:-20]
-diabetes_y_test = diabetes_y[-20:]
+X = np.array(data.drop([predict], axis=1))
+y = np.array(data[predict])
 
-# Train the model using linear regression
+# Split the data into training and testing sets
+x_train,y_train, x_test,y_test = sklearn.model_selection.train_test_split(X,y,test_size = 0.2)
+
+# Train the model using Multiple Linear Regression
 regression = linear_model.LinearRegression()
-regression.fit(diabetes_x_train, diabetes_y_train)
-
-pred = regression.predict(diabetes_x_test)
-
+regression.fit(x_train, y_train)
+pred = regression.predict(x_test)
 print('pred', pred)
-print('Mean squared error: %.2f' % mean_squared_error(diabetes_y_test, pred))
-print('R2 score: %.2f' % r2_score(diabetes_y_test, pred))
-plt.scatter(diabetes_x_test, diabetes_y_test, color='black')
-plt.plot(diabetes_x_test, diabetes_y_test, color='blue', linewidth=3)
-
+print('Mean squared error: %.2f' % mean_squared_error(y_test, pred))
+print('R2 score: %.2f' % r2_score(y_test, pred))
+for i in range(len(pred)):
+    print(f'Predicted: {pred[i]}, Actual: {y_test[i]}')
+plt.scatter(y_test, pred, color='black')
+plt.plot([0, 20], [0, 20], color='blue', linewidth=3)
+plt.xlabel('Actual G3')
+plt.ylabel('Predicted G3')
 plt.xticks(())
 plt.yticks(())
 plt.show()
