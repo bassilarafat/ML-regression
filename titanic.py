@@ -12,7 +12,8 @@ data = pd.read_csv('https://raw.githubusercontent.com/datasciencedojo/datasets/m
 evalData = pd.read_csv('https://raw.githubusercontent.com/datasciencedojo/datasets/master/titanic.csv')
 print(data.head())    #pandas dataframe
 
-data.describe()
+dFtrain.describe()
+# dFeval.shape()
 # # extract the output column
 # y_train = data.pop('survived')
 # # extract the input features
@@ -27,7 +28,7 @@ data.describe()
 # data.Sex.value_counts().plot(kind='barh')
 
 #get the histogram about the percentage survived by Sex
-pd.concat([data],axis=1).groupby('Sex').Survived.mean().plot(kind='barh').set_xlabel('Survived percentage')
-plt.show()
+# pd.concat([data],axis=1).groupby('Sex').Survived.mean().plot(kind='barh').set_xlabel('Survived percentage')
+# plt.show()
 
 
